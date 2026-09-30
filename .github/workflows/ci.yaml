@@ -1,0 +1,39 @@
+name: ci
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 6 * * *'   # catches a stale cache and a moved Lyrical
+jobs:
+  distributions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install the rosdistro fork
+        run: |
+          pip install pytest PyYAML catkin_pkg rospkg setuptools \
+            git+https://github.com/rep159-testing/rosdistro@rep159
+      - run: python -m pytest -v test
+  workspaces:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: rep159-testing/ros_buildfarm
+          ref: rep159
+          path: ros_buildfarm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install the rosdistro fork and ros_buildfarm's dependencies
+        run: |
+          pip install PyYAML catkin_pkg rospkg setuptools empy vcstool \
+            git+https://github.com/rep159-testing/rosdistro@rep159
+      - name: Resolve the CI workspaces
+        run: |
+          PYTHONPATH=$PWD/ros_buildfarm python tools/check_workspaces.py \
+            "file://$PWD/index-v4.yaml"

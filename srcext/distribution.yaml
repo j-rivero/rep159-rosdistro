@@ -1,0 +1,15 @@
+%YAML 1.1
+# srcext: rebuilds the upstream packages it needs under its own name
+# (REP 159 extension_method: source_rebuild). No index_url, so upstream is
+# looked up in this same index.
+---
+extends:
+- distro_name: upstream
+  extension_method: source_rebuild
+release_platforms:
+  ubuntu: [resolute]
+repositories:
+  downstream_src_a:
+    source: {type: git, url: https://github.com/rep159-testing/downstream_src_a.git, version: main}
+type: distribution
+version: 3

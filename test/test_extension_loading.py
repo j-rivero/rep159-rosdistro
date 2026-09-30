@@ -1,0 +1,82 @@
+"""Load the harness distributions the way ros_buildfarm does.
+
+Needs a rosdistro that parses distribution file format 3 and loads parent
+caches from extends[].index_url (rep159-testing/rosdistro, branch rep159),
+and network access to the official ROS index for binext.
+"""
+
+import copy
+import os
+
+import pytest
+from rosdistro import get_cached_distribution
+from rosdistro import get_index
+import yaml
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+INDEX_URL = 'file://' + os.path.join(ROOT, 'index-v4.yaml')
+UPSTREAM = ('upstream_a', 'upstream_b', 'upstream_c')
+
+
+def load(path):
+    with open(os.path.join(ROOT, path)) as f:
+        return yaml.safe_load(f)
+
+
+def test_srcext_rebuilds_upstream_under_its_own_name():
+    dist = get_cached_distribution(get_index(INDEX_URL), 'srcext')
+    assert set(dist.source_packages) == set(UPSTREAM) | {'downstream_src_a'}
+    assert not dist.release_packages
+    for repo_name in UPSTREAM:
+        repo = dist.repositories[repo_name]
+        assert repo.origin_distro == 'srcext'
+        assert repo.extension_method == 'source_rebuild'
+
+
+def test_binext_imports_the_official_lyrical_binaries():
+    dist = get_cached_distribution(get_index(INDEX_URL), 'binext')
+    repo = dist.repositories[dist.release_packages['rcl'].repository_name]
+    assert repo.origin_distro == 'lyrical'
+    assert repo.extension_method == 'binary_import'
+    assert 'downstream_bin_a' in dist.source_packages
+
+
+def _write_index(tmp_path, distributions):
+    """Write an index of `{name: (distribution_file, cache)}` in tmp_path."""
+    index = {'type': 'index', 'version': 4, 'distributions': {}}
+    for name, (dist_data, cache_data) in distributions.items():
+        (tmp_path / name).mkdir()
+        with open(str(tmp_path / name / 'distribution.yaml'), 'w') as f:
+            yaml.safe_dump(dist_data, f)
+        with open(str(tmp_path / ('%s-cache.yaml' % name)), 'w') as f:
+            yaml.safe_dump(cache_data, f)
+        index['distributions'][name] = {
+            'distribution': ['%s/distribution.yaml' % name],
+            'distribution_cache': '%s-cache.yaml' % name,
+            'distribution_status': 'active',
+            'distribution_type': 'ros2',
+            'python_version': 3,
+        }
+    with open(str(tmp_path / 'index-v4.yaml'), 'w') as f:
+        yaml.safe_dump(index, f)
+    return get_index('file://%s' % (tmp_path / 'index-v4.yaml'))
+
+
+def _files(name):
+    return load('%s/distribution.yaml' % name), load('%s-cache.yaml' % name)
+
+
+def test_unreachable_lyrical_index_fails_the_load(tmp_path):
+    dist_data, cache_data = copy.deepcopy(_files('binext'))
+    bad_url = 'file://%s' % (tmp_path / 'missing' / 'index-v4.yaml')
+    dist_data['extends'][0]['index_url'] = bad_url
+    cache_data['distribution_file'][0]['extends'][0]['index_url'] = bad_url
+    index = _write_index(tmp_path, {'binext': (dist_data, cache_data)})
+    with pytest.raises(RuntimeError, match="'lyrical', which 'binext' extends"):
+        get_cached_distribution(index, 'binext')
+
+
+def test_missing_upstream_fails_the_srcext_load(tmp_path):
+    index = _write_index(tmp_path, {'srcext': _files('srcext')})
+    with pytest.raises(RuntimeError, match="'upstream', which 'srcext' extends"):
+        get_cached_distribution(index, 'srcext')

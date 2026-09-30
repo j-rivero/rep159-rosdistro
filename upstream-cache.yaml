@@ -1,0 +1,30 @@
+distribution_file:
+- release_platforms:
+    ubuntu:
+    - resolute
+  repositories:
+    upstream_a: {source: {type: git, url: 'https://github.com/rep159-testing/upstream_a.git', version: main}}
+    upstream_b: {source: {type: git, url: 'https://github.com/rep159-testing/upstream_b.git', version: main}}
+    upstream_c: {source: {type: git, url: 'https://github.com/rep159-testing/upstream_c.git', version: main}}
+  type: distribution
+  version: 3
+name: upstream
+release_package_xmls: {}
+source_repo_package_xmls:
+  upstream_a:
+    _ref: 18480a749142b7677aa7c185efd6e9a30a855a79
+    upstream_a:
+    - ''
+    - '<?xml version="1.0" ?><?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?><package format="3"><name>upstream_a</name><version>0.1.0</version><description>Bottom of the REP-159 test chain: counts the elements of an XML document with libxml2. Part of the upstream distribution of the rep159-testing harness.</description><maintainer email="jrivero@honurobotics.com">Jose Luis Rivero</maintainer><license>Apache-2.0</license><buildtool_depend>cmake</buildtool_depend><depend>libxml2</depend><build_depend>gtest</build_depend><test_depend>gtest</test_depend><export><build_type>cmake</build_type></export></package>'
+  upstream_b:
+    _ref: 58d0495faafaf84b6d1e4a5beac0f4a1e242e948
+    upstream_b:
+    - ''
+    - '<?xml version="1.0" ?><?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?><package format="3"><name>upstream_b</name><version>0.1.0</version><description>Middle of the REP-159 test chain: summarizes an XML document through upstream_a. Part of the upstream distribution of the rep159-testing harness.</description><maintainer email="jrivero@honurobotics.com">Jose Luis Rivero</maintainer><license>Apache-2.0</license><buildtool_depend>cmake</buildtool_depend><depend>upstream_a</depend><build_depend>gtest</build_depend><test_depend>gtest</test_depend><export><build_type>cmake</build_type></export></package>'
+  upstream_c:
+    _ref: fa7db13f83da86bdcc34b267b00bfc368269c194
+    upstream_c:
+    - ''
+    - '<?xml version="1.0" ?><?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?><package format="3"><name>upstream_c</name><version>0.1.0</version><description>Top of the REP-159 test chain: labels an XML summary from upstream_b. Part of the upstream distribution of the rep159-testing harness.</description><maintainer email="jrivero@honurobotics.com">Jose Luis Rivero</maintainer><license>Apache-2.0</license><buildtool_depend>cmake</buildtool_depend><depend>upstream_b</depend><build_depend>gtest</build_depend><test_depend>gtest</test_depend><export><build_type>cmake</build_type></export></package>'
+type: cache
+version: 2

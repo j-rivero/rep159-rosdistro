@@ -1,0 +1,31 @@
+%YAML 1.1
+# REP 159 test harness: three distributions, none of them a ROS release.
+#   upstream  a root distribution: upstream_a <- upstream_b <- upstream_c
+#   srcext    extends upstream with extension_method: source_rebuild
+#   binext    extends ROS 2 Lyrical (official index) with binary_import
+#
+# distribution_type is ros2 everywhere because ros_buildfarm's ci_job.py
+# accepts only ros1 or ros2; none of these distributions is a ROS release.
+# Caches: tools/regenerate-caches.sh.
+---
+type: index
+version: 4
+distributions:
+  upstream:
+    distribution: [upstream/distribution.yaml]
+    distribution_cache: upstream-cache.yaml.gz
+    distribution_status: active
+    distribution_type: ros2
+    python_version: 3
+  srcext:
+    distribution: [srcext/distribution.yaml]
+    distribution_cache: srcext-cache.yaml.gz
+    distribution_status: active
+    distribution_type: ros2
+    python_version: 3
+  binext:
+    distribution: [binext/distribution.yaml]
+    distribution_cache: binext-cache.yaml.gz
+    distribution_status: active
+    distribution_type: ros2
+    python_version: 3

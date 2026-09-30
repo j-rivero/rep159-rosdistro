@@ -1,0 +1,21 @@
+distribution_file:
+- extends:
+  - distro_name: upstream
+    extension_method: source_rebuild
+  release_platforms:
+    ubuntu:
+    - resolute
+  repositories:
+    downstream_src_a: {source: {type: git, url: 'https://github.com/rep159-testing/downstream_src_a.git', version: main}}
+  type: distribution
+  version: 3
+name: srcext
+release_package_xmls: {}
+source_repo_package_xmls:
+  downstream_src_a:
+    _ref: 71ecc979e31b230a18c8597f527d3c8771404522
+    downstream_src_a:
+    - ''
+    - '<?xml version="1.0" ?><?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?><package format="3"><name>downstream_src_a</name><version>0.1.0</version><description>Package of the srcext distribution of the REP-159 test harness: reads a YAML document with libyaml and labels its XML payload through the upstream chain, which srcext rebuilds with source_rebuild.</description><maintainer email="jrivero@honurobotics.com">Jose Luis Rivero</maintainer><license>Apache-2.0</license><buildtool_depend>cmake</buildtool_depend><buildtool_depend>pkg-config</buildtool_depend><depend>upstream_c</depend><build_depend>libyaml-dev</build_depend><exec_depend>libyaml</exec_depend><build_depend>gtest</build_depend><test_depend>gtest</test_depend><export><build_type>cmake</build_type></export></package>'
+type: cache
+version: 2

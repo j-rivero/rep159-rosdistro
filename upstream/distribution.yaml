@@ -1,0 +1,14 @@
+%YAML 1.1
+# upstream: a root distribution (no extends) of three source-only packages.
+---
+release_platforms:
+  ubuntu: [resolute]
+repositories:
+  upstream_a:
+    source: {type: git, url: https://github.com/rep159-testing/upstream_a.git, version: main}
+  upstream_b:
+    source: {type: git, url: https://github.com/rep159-testing/upstream_b.git, version: main}
+  upstream_c:
+    source: {type: git, url: https://github.com/rep159-testing/upstream_c.git, version: main}
+type: distribution
+version: 3
