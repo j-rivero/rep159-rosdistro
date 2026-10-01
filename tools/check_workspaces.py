@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Assert the checkout each downstream CI job resolves from this index.
+"""Assert the checkout each CI job resolves from this index.
 
 Runs ros_buildfarm's create_workspace selection (rep159-testing/ros_buildfarm,
 branch rep159, on PYTHONPATH) with the rosdistro fork, without cloning.
@@ -18,6 +18,10 @@ from rosdistro import get_index
 # (binary_import), so even a walk of downstream_bin_a's dependencies must not
 # check out the upstream repositories.
 EXPECTED = [
+    ('upstream',
+     {'repository_names': ['upstream_a', 'upstream_b', 'upstream_c'],
+      'package_names': [], 'package_dependencies': False},
+     ['upstream_a', 'upstream_b', 'upstream_c']),
     ('srcext',
      {'repository_names': [], 'package_names': ['downstream_src_a'],
       'package_dependencies': True},
