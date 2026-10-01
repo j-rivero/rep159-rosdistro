@@ -1,8 +1,7 @@
 distribution_file:
 - extends:
-  - distro_name: lyrical
+  - distro_name: upstream
     extension_method: binary_import
-    index_url: https://raw.githubusercontent.com/ros/rosdistro/master/index-v4.yaml
   release_platforms:
     ubuntu:
     - resolute
@@ -14,9 +13,9 @@ name: binext
 release_package_xmls: {}
 source_repo_package_xmls:
   downstream_bin_a:
-    _ref: c9e8a83b075304447cf0301547c5d7a0c4aad92e
+    _ref: 092138ece80d21b0b863d5b6e099d09852a4a341
     downstream_bin_a:
     - ''
-    - '<?xml version="1.0" ?><?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?><package format="3"><name>downstream_bin_a</name><version>0.1.0</version><description>Package of the binext distribution of the REP-159 test harness: a shared library on top of rcl. binext extends ROS 2 Lyrical with binary_import, so rcl and everything below it come from the ros-lyrical-* debs.</description><maintainer email="jrivero@honurobotics.com">Jose Luis Rivero</maintainer><license>Apache-2.0</license><buildtool_depend>ament_cmake</buildtool_depend><depend>rcl</depend><build_depend>ament_cmake_gtest</build_depend><test_depend>ament_cmake_gtest</test_depend><export><build_type>ament_cmake</build_type></export></package>'
+    - '<?xml version="1.0" ?><?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?><package format="3"><name>downstream_bin_a</name><version>0.2.0</version><description>Package of the binext distribution of the REP-159 test harness: reads a YAML document with libyaml and labels its XML payload through the upstream chain, which binext imports as binaries with binary_import.</description><maintainer email="jrivero@honurobotics.com">Jose Luis Rivero</maintainer><license>Apache-2.0</license><buildtool_depend>cmake</buildtool_depend><buildtool_depend>pkg-config</buildtool_depend><depend>upstream_c</depend><build_depend>libyaml-dev</build_depend><exec_depend>libyaml</exec_depend><build_depend>gtest</build_depend><test_depend>gtest</test_depend><export><build_type>cmake</build_type></export></package>'
 type: cache
 version: 2

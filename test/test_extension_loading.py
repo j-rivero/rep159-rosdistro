@@ -1,8 +1,7 @@
 """Load the harness distributions the way ros_buildfarm does.
 
 Needs a rosdistro that parses distribution file format 3 and loads parent
-caches from extends[].index_url (rep159-testing/rosdistro, branch rep159),
-and network access to the official ROS index for binext.
+caches from extends[].index_url (rep159-testing/rosdistro, branch rep159).
 """
 
 import copy
@@ -33,12 +32,15 @@ def test_srcext_rebuilds_upstream_under_its_own_name():
         assert repo.extension_method == 'source_rebuild'
 
 
-def test_binext_imports_the_official_lyrical_binaries():
+def test_binext_imports_upstream_as_binaries():
     dist = get_cached_distribution(get_index(INDEX_URL), 'binext')
-    repo = dist.repositories[dist.release_packages['rcl'].repository_name]
-    assert repo.origin_distro == 'lyrical'
-    assert repo.extension_method == 'binary_import'
-    assert 'downstream_bin_a' in dist.source_packages
+    assert set(dist.source_packages) == set(UPSTREAM) | {'downstream_bin_a'}
+    assert not dist.release_packages
+    for repo_name in UPSTREAM:
+        repo = dist.repositories[repo_name]
+        assert repo.origin_distro == 'upstream'
+        assert repo.extension_method == 'binary_import'
+    assert dist.repositories['downstream_bin_a'].origin_distro == 'binext'
 
 
 def _write_index(tmp_path, distributions):
@@ -66,17 +68,20 @@ def _files(name):
     return load('%s/distribution.yaml' % name), load('%s-cache.yaml' % name)
 
 
-def test_unreachable_lyrical_index_fails_the_load(tmp_path):
+def test_unreachable_parent_index_fails_the_load(tmp_path):
+    # A parent in another index (extends[].index_url) that cannot be read.
     dist_data, cache_data = copy.deepcopy(_files('binext'))
     bad_url = 'file://%s' % (tmp_path / 'missing' / 'index-v4.yaml')
     dist_data['extends'][0]['index_url'] = bad_url
     cache_data['distribution_file'][0]['extends'][0]['index_url'] = bad_url
     index = _write_index(tmp_path, {'binext': (dist_data, cache_data)})
-    with pytest.raises(RuntimeError, match="'lyrical', which 'binext' extends"):
+    with pytest.raises(RuntimeError, match="'upstream', which 'binext' extends"):
         get_cached_distribution(index, 'binext')
 
 
-def test_missing_upstream_fails_the_srcext_load(tmp_path):
-    index = _write_index(tmp_path, {'srcext': _files('srcext')})
-    with pytest.raises(RuntimeError, match="'upstream', which 'srcext' extends"):
-        get_cached_distribution(index, 'srcext')
+@pytest.mark.parametrize('name', ('srcext', 'binext'))
+def test_missing_upstream_fails_the_load(tmp_path, name):
+    index = _write_index(tmp_path, {name: _files(name)})
+    with pytest.raises(
+            RuntimeError, match="'upstream', which '%s' extends" % name):
+        get_cached_distribution(index, name)

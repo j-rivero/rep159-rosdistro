@@ -3,7 +3,7 @@ on:
   push:
   pull_request:
   schedule:
-    - cron: '0 6 * * *'   # catches a stale cache and a moved Lyrical
+    - cron: '0 6 * * *'   # catches a stale cache
 jobs:
   distributions:
     runs-on: ubuntu-latest

@@ -14,21 +14,28 @@ from rosdistro import get_cached_distribution
 from rosdistro import get_index
 
 # The selection each ci-build file makes, and the repositories it must yield.
-EXPECTED = {
-    'srcext': (
-        {'repository_names': [], 'package_names': ['downstream_src_a'],
-         'package_dependencies': True},
-        ['downstream_src_a', 'upstream_a', 'upstream_b', 'upstream_c']),
-    'binext': (
-        {'repository_names': ['downstream_bin_a'], 'package_names': [],
-         'package_dependencies': False},
-        ['downstream_bin_a']),
-}
+# The last one is no ci-build file: binext's parent comes as binaries
+# (binary_import), so even a walk of downstream_bin_a's dependencies must not
+# check out the upstream repositories.
+EXPECTED = [
+    ('srcext',
+     {'repository_names': [], 'package_names': ['downstream_src_a'],
+      'package_dependencies': True},
+     ['downstream_src_a', 'upstream_a', 'upstream_b', 'upstream_c']),
+    ('binext',
+     {'repository_names': ['downstream_bin_a'], 'package_names': [],
+      'package_dependencies': False},
+     ['downstream_bin_a']),
+    ('binext',
+     {'repository_names': [], 'package_names': ['downstream_bin_a'],
+      'package_dependencies': True},
+     ['downstream_bin_a']),
+]
 
 
 def main(index_url):
     index = get_index(index_url)
-    for distro, (selection, expected) in sorted(EXPECTED.items()):
+    for distro, selection, expected in EXPECTED:
         data = get_repositories_data(
             get_cached_distribution(index, distro), **selection)
         assert sorted(data) == expected, \

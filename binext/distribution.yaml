@@ -1,10 +1,10 @@
 %YAML 1.1
-# binext: uses the official ros-lyrical-* binaries as they are and builds only
-# its own package (REP 159 extension_method: binary_import).
+# binext: uses upstream's packages as the binaries upstream releases and
+# builds only its own package (REP 159 extension_method: binary_import). No
+# index_url: REP 159 then looks in this same index.
 ---
 extends:
-- index_url: https://raw.githubusercontent.com/ros/rosdistro/master/index-v4.yaml
-  distro_name: lyrical
+- distro_name: upstream
   extension_method: binary_import
 release_platforms:
   ubuntu: [resolute]

@@ -12,8 +12,6 @@ import pytest
 import yaml
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-LYRICAL_INDEX = \
-    'https://raw.githubusercontent.com/ros/rosdistro/master/index-v4.yaml'
 DISTROS = ('upstream', 'srcext', 'binext')
 REPOSITORIES = {
     'upstream': {'upstream_a', 'upstream_b', 'upstream_c'},
@@ -26,8 +24,7 @@ EXTENDS = {
     'srcext': [
         {'distro_name': 'upstream', 'extension_method': 'source_rebuild'}],
     'binext': [
-        {'index_url': LYRICAL_INDEX, 'distro_name': 'lyrical',
-         'extension_method': 'binary_import'}],
+        {'distro_name': 'upstream', 'extension_method': 'binary_import'}],
 }
 
 
