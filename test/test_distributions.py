@@ -14,7 +14,8 @@ import yaml
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DISTROS = ('upstream', 'srcext', 'binext')
 REPOSITORIES = {
-    'upstream': {'upstream_a', 'upstream_b', 'upstream_c'},
+    'upstream': {'ament_cmake_core', 'ament_package', 'ros_workspace',
+                 'upstream_a', 'upstream_b', 'upstream_c'},
     'srcext': {'downstream_src_a'},
     'binext': {'downstream_bin_a'},
 }

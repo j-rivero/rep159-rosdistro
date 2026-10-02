@@ -14,7 +14,8 @@ import yaml
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INDEX_URL = 'file://' + os.path.join(ROOT, 'index-v4.yaml')
-UPSTREAM = ('upstream_a', 'upstream_b', 'upstream_c')
+UPSTREAM = ('ament_cmake_core', 'ament_package', 'ros_workspace',
+            'upstream_a', 'upstream_b', 'upstream_c')
 
 
 def load(path):

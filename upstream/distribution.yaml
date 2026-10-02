@@ -1,9 +1,18 @@
 %YAML 1.1
-# upstream: a root distribution (no extends) of three source-only packages.
+# upstream: a root distribution (no extends) of source-only packages: the
+# upstream_a <- upstream_b <- upstream_c chain, and copies of ament_package
+# <- ament_cmake_core <- ros_workspace. bloom makes every other package of a
+# ros2 distribution depend on ros-<distro>-ros-workspace.
 ---
 release_platforms:
   ubuntu: [resolute]
 repositories:
+  ament_cmake_core:
+    source: {type: git, url: https://github.com/rep159-testing/ament_cmake_core.git, version: main}
+  ament_package:
+    source: {type: git, url: https://github.com/rep159-testing/ament_package.git, version: main}
+  ros_workspace:
+    source: {type: git, url: https://github.com/rep159-testing/ros_workspace.git, version: main}
   upstream_a:
     source: {type: git, url: https://github.com/rep159-testing/upstream_a.git, version: main}
   upstream_b:

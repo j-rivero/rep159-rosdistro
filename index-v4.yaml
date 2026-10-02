@@ -1,6 +1,7 @@
 %YAML 1.1
 # REP 159 test harness: three distributions, none of them a ROS release.
 #   upstream  a root distribution: upstream_a <- upstream_b <- upstream_c
+#             plus ament_package <- ament_cmake_core <- ros_workspace
 #   srcext    extends upstream with extension_method: source_rebuild
 #   binext    extends upstream with extension_method: binary_import
 #
