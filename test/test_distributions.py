@@ -98,9 +98,8 @@ def test_compressed_cache_matches_the_plain_cache(name):
 
 @pytest.mark.parametrize('name', DISTROS)
 def test_cache_refs_match_the_branch_heads(name):
-    # A push to a package's main without regenerating the caches leaves
-    # stale package.xml files behind; regenerate with
-    # tools/regenerate-caches.sh.
+    # A push to a package's main leaves stale package.xml files behind
+    # until tools/regenerate-caches.sh runs again (CI does, nightly).
     for repo_name, data in cache(name)['source_repo_package_xmls'].items():
         url = 'https://github.com/rep159-testing/%s.git' % repo_name
         head = subprocess.check_output(

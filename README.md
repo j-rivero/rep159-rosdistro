@@ -33,7 +33,10 @@ Loading these files needs a rosdistro that parses distribution file format 3
 and resolves `extends` (from `extends[].index_url` when an entry has one):
 `rep159-testing/rosdistro`, branch `rep159`.
 
-- `tools/regenerate-caches.sh`: rebuild the caches after a package push.
+- `tools/regenerate-caches.sh`: rebuild the caches. CI runs it before
+  testing every push and pull request, and commits the result to `main`
+  after each push there and nightly. Pull requests, bloom's included, do
+  not need to carry a cache commit.
 - `tools/check_workspaces.py`: the checkout each CI job resolves, through
   `rep159-testing/ros_buildfarm` (branch `rep159`).
 - `test/`: structure, cache freshness and extension loading.

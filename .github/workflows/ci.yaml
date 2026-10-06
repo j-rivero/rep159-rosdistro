@@ -1,12 +1,26 @@
 name: ci
+# The committed caches are build output. Every run regenerates them before
+# testing, so a pull request (bloom's included) is tested against caches that
+# match its distribution files without carrying a cache commit. On main, the
+# regenerated caches are committed back, and the nightly run picks up pushes
+# to the package repositories.
 on:
   push:
   pull_request:
   schedule:
-    - cron: '0 6 * * *'   # catches a stale cache
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
 jobs:
   distributions:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write   # the commit to main; pull requests from forks get read
+    # One cache commit at a time on main; other refs never push.
+    concurrency:
+      group: caches-${{ github.ref }}
+      cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -16,11 +30,38 @@ jobs:
         run: |
           pip install pytest PyYAML catkin_pkg rospkg setuptools \
             git+https://github.com/rep159-testing/rosdistro@rep159
+      - run: tools/regenerate-caches.sh
       - run: python -m pytest -v test
+      - uses: actions/upload-artifact@v4
+        with:
+          name: caches
+          path: '*-cache.yaml*'
+      - name: Commit the caches to main
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        run: |
+          git add '*-cache.yaml' '*-cache.yaml.gz'
+          if git diff --cached --quiet; then
+            echo 'Caches are up to date'
+            exit 0
+          fi
+          git fetch -q origin main
+          if [ "$(git rev-parse FETCH_HEAD)" != "$GITHUB_SHA" ]; then
+            echo 'main has moved on; the run for its head commits the caches'
+            exit 0
+          fi
+          git -c user.name='github-actions[bot]' \
+              -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+              commit -m "Regenerate the caches for ${GITHUB_SHA::7}"
+          # A push made with GITHUB_TOKEN starts no new workflow run.
+          git push origin HEAD:main
   workspaces:
+    needs: distributions
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: caches
       - uses: actions/checkout@v4
         with:
           repository: rep159-testing/ros_buildfarm
