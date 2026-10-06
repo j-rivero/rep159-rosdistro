@@ -23,10 +23,18 @@ def load(path):
         return yaml.safe_load(f)
 
 
+def upstream_releases():
+    return {repo_name for repo_name, repo
+            in load('upstream/distribution.yaml')['repositories'].items()
+            if 'release' in repo}
+
+
 def test_srcext_rebuilds_upstream_under_its_own_name():
     dist = get_cached_distribution(get_index(INDEX_URL), 'srcext')
     assert set(dist.source_packages) == set(UPSTREAM) | {'downstream_src_a'}
-    assert not dist.release_packages
+    # The release stanzas come along unchanged, release/upstream/ tags
+    # included; only the binary names change (ros-srcext-*, in rosdep).
+    assert set(dist.release_packages) == upstream_releases()
     for repo_name in UPSTREAM:
         repo = dist.repositories[repo_name]
         assert repo.origin_distro == 'srcext'
@@ -36,7 +44,7 @@ def test_srcext_rebuilds_upstream_under_its_own_name():
 def test_binext_imports_upstream_as_binaries():
     dist = get_cached_distribution(get_index(INDEX_URL), 'binext')
     assert set(dist.source_packages) == set(UPSTREAM) | {'downstream_bin_a'}
-    assert not dist.release_packages
+    assert set(dist.release_packages) == upstream_releases()
     for repo_name in UPSTREAM:
         repo = dist.repositories[repo_name]
         assert repo.origin_distro == 'upstream'

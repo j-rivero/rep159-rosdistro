@@ -6,6 +6,7 @@ needs network access to GitHub.
 
 import gzip
 import os
+import re
 import subprocess
 
 import pytest
@@ -52,15 +53,39 @@ def test_index_lists_exactly_the_three_distributions():
         assert entry['distribution_cache'] == '%s-cache.yaml.gz' % name
 
 
+def released(name):
+    """Repositories of a distribution file that have a release stanza."""
+    return {repo_name for repo_name, repo
+            in distribution_file(name)['repositories'].items()
+            if 'release' in repo}
+
+
 @pytest.mark.parametrize('name', DISTROS)
-def test_repositories_are_source_only_on_main(name):
+def test_repositories_track_main(name):
     repositories = distribution_file(name)['repositories']
     assert set(repositories) == REPOSITORIES[name]
     for repo_name, repo in repositories.items():
-        assert repo == {'source': {
+        assert set(repo) <= {'source', 'release'}, repo_name
+        assert repo['source'] == {
             'type': 'git',
             'url': 'https://github.com/rep159-testing/%s.git' % repo_name,
-            'version': 'main'}}
+            'version': 'main'}
+
+
+@pytest.mark.parametrize('name', DISTROS)
+def test_releases_are_bloom_stanzas(name):
+    # What bloom writes for a track named after the distribution, into
+    # rep159-testing/<repository>-release.
+    repositories = distribution_file(name)['repositories']
+    for repo_name in released(name):
+        release = repositories[repo_name]['release']
+        assert set(release) == {'tags', 'url', 'version'}, repo_name
+        assert release['tags'] == {
+            'release': 'release/%s/{package}/{version}' % name}
+        assert release['url'] == \
+            'https://github.com/rep159-testing/%s-release.git' % repo_name
+        assert re.fullmatch(r'\d+\.\d+\.\d+-\d+', release['version']), \
+            release['version']
 
 
 @pytest.mark.parametrize('name', DISTROS)
@@ -82,10 +107,11 @@ def test_cache_embeds_the_unmerged_distribution_file(name):
 
 
 @pytest.mark.parametrize('name', DISTROS)
-def test_cache_holds_every_source_package_and_no_release(name):
+def test_cache_holds_every_source_and_release_package(name):
+    # Every repository holds one package of the same name.
     data = cache(name)
     assert set(data['source_repo_package_xmls']) == REPOSITORIES[name]
-    assert data['release_package_xmls'] == {}
+    assert set(data['release_package_xmls']) == released(name)
 
 
 @pytest.mark.parametrize('name', DISTROS)
