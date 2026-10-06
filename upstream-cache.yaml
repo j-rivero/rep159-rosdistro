@@ -4,7 +4,7 @@ distribution_file:
     - resolute
   repositories:
     ament_cmake_core: {source: {type: git, url: 'https://github.com/rep159-testing/ament_cmake_core.git', version: main}}
-    ament_package: {source: {type: git, url: 'https://github.com/rep159-testing/ament_package.git', version: main}}
+    ament_package: {release: {tags: {release: 'release/upstream/{package}/{version}'}, url: 'https://github.com/rep159-testing/ament_package-release.git', version: 0.18.3-1}, source: {type: git, url: 'https://github.com/rep159-testing/ament_package.git', version: main}}
     ros_workspace: {source: {type: git, url: 'https://github.com/rep159-testing/ros_workspace.git', version: main}}
     upstream_a: {source: {type: git, url: 'https://github.com/rep159-testing/upstream_a.git', version: main}}
     upstream_b: {source: {type: git, url: 'https://github.com/rep159-testing/upstream_b.git', version: main}}
@@ -12,7 +12,8 @@ distribution_file:
   type: distribution
   version: 3
 name: upstream
-release_package_xmls: {}
+release_package_xmls:
+  ament_package: &id001 <?xml version="1.0" ?><?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?><package format="2"><name>ament_package</name><version>0.18.3</version><description>The parser for the manifest files in the ament buildsystem.</description><maintainer email="dharini@openrobotics.org">Dharini Dutia</maintainer><license>Apache License 2.0</license><author email="audrow@openrobotics.org">Audrow Nash</author><author email="dthomas@osrfoundation.org">Dirk Thomas</author><author email="mabel@openrobotics.org">Mabel Zhang</author><buildtool_export_depend>python3-setuptools</buildtool_export_depend><test_depend>python3-flake8</test_depend><test_depend>python3-pytest</test_depend><export><build_type>ament_python</build_type></export></package>
 source_repo_package_xmls:
   ament_cmake_core:
     _ref: f807d2ade807b3455057d4c64d089e0134a1e800
@@ -23,7 +24,7 @@ source_repo_package_xmls:
     _ref: 98089783110f7606a90e8ef9786719c3d0cd32f9
     ament_package:
     - ''
-    - <?xml version="1.0" ?><?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?><package format="2"><name>ament_package</name><version>0.18.3</version><description>The parser for the manifest files in the ament buildsystem.</description><maintainer email="dharini@openrobotics.org">Dharini Dutia</maintainer><license>Apache License 2.0</license><author email="audrow@openrobotics.org">Audrow Nash</author><author email="dthomas@osrfoundation.org">Dirk Thomas</author><author email="mabel@openrobotics.org">Mabel Zhang</author><buildtool_export_depend>python3-setuptools</buildtool_export_depend><test_depend>python3-flake8</test_depend><test_depend>python3-pytest</test_depend><export><build_type>ament_python</build_type></export></package>
+    - *id001
   ros_workspace:
     _ref: db49f0ae77098cb631f6a262808b01030ac6f784
     ros_workspace:
