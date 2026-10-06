@@ -63,8 +63,17 @@ def released(name):
 @pytest.mark.parametrize('name', DISTROS)
 def test_repositories_track_main(name):
     repositories = distribution_file(name)['repositories']
-    assert set(repositories) == REPOSITORIES[name]
+    inherited = set().union(
+        *(REPOSITORIES[parent['distro_name']] for parent in EXTENDS[name]))
+    assert set(repositories) - inherited == REPOSITORIES[name]
     for repo_name, repo in repositories.items():
+        if repo_name in inherited:
+            # bloom into a source_rebuild child adds the child's own release
+            # stanza; the source entry stays the parent's.
+            assert [p['extension_method'] for p in EXTENDS[name]] == \
+                ['source_rebuild'], repo_name
+            assert set(repo) == {'release'}, repo_name
+            continue
         assert set(repo) <= {'source', 'release'}, repo_name
         assert repo['source'] == {
             'type': 'git',
@@ -90,7 +99,12 @@ def test_releases_are_bloom_stanzas(name):
 
 @pytest.mark.parametrize('name', DISTROS)
 def test_extends(name):
-    assert distribution_file(name).get('extends', []) == EXTENDS[name]
+    # rosdistro's writer, which bloom uses, emits an absent index_url as
+    # `index_url:` (null); both mean "this same index".
+    extends = [{key: value for key, value in parent.items()
+                if value is not None}
+               for parent in distribution_file(name).get('extends', [])]
+    assert extends == EXTENDS[name]
 
 
 @pytest.mark.parametrize('name', DISTROS)

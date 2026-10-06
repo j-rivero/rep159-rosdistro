@@ -23,22 +23,38 @@ def load(path):
         return yaml.safe_load(f)
 
 
-def upstream_releases():
+def releases(name):
     return {repo_name for repo_name, repo
-            in load('upstream/distribution.yaml')['repositories'].items()
+            in load('%s/distribution.yaml' % name)['repositories'].items()
             if 'release' in repo}
+
+
+def upstream_releases():
+    return releases('upstream')
 
 
 def test_srcext_rebuilds_upstream_under_its_own_name():
     dist = get_cached_distribution(get_index(INDEX_URL), 'srcext')
     assert set(dist.source_packages) == set(UPSTREAM) | {'downstream_src_a'}
-    # The release stanzas come along unchanged, release/upstream/ tags
-    # included; only the binary names change (ros-srcext-*, in rosdep).
-    assert set(dist.release_packages) == upstream_releases()
+    assert set(dist.release_packages) == upstream_releases() | releases('srcext')
+    upstream = get_cached_distribution(get_index(INDEX_URL), 'upstream')
     for repo_name in UPSTREAM:
         repo = dist.repositories[repo_name]
         assert repo.origin_distro == 'srcext'
-        assert repo.extension_method == 'source_rebuild'
+        assert repo.source_repository.url == \
+            upstream.repositories[repo_name].source_repository.url
+        if repo_name in releases('srcext'):
+            # Released into srcext with bloom: srcext's own stanza replaces
+            # upstream's, and the fork then reports the repository as
+            # srcext's own (no extension_method).
+            assert repo.extension_method is None
+            assert repo.release_repository.tags == {
+                'release': 'release/srcext/{package}/{version}'}
+        else:
+            # Not released into srcext yet: upstream's stanza comes along
+            # unchanged, release/upstream/ tags included, while rosdep
+            # already names the package ros-srcext-*.
+            assert repo.extension_method == 'source_rebuild'
 
 
 def test_binext_imports_upstream_as_binaries():
