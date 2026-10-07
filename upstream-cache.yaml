@@ -3,28 +3,30 @@ distribution_file:
     ubuntu:
     - resolute
   repositories:
-    ament_cmake_core: {source: {type: git, url: 'https://github.com/rep159-testing/ament_cmake_core.git', version: main}}
+    ament_cmake_core: {release: {tags: {release: 'release/upstream/{package}/{version}'}, url: 'https://github.com/rep159-testing/ament_cmake_core-release.git', version: 2.8.8-1}, source: {type: git, url: 'https://github.com/rep159-testing/ament_cmake_core.git', version: main}}
     ament_package: {release: {tags: {release: 'release/upstream/{package}/{version}'}, url: 'https://github.com/rep159-testing/ament_package-release.git', version: 0.18.3-1}, source: {type: git, url: 'https://github.com/rep159-testing/ament_package.git', version: main}}
     ros_workspace: {source: {type: git, url: 'https://github.com/rep159-testing/ros_workspace.git', version: main}}
-    upstream_a: {source: {type: git, url: 'https://github.com/rep159-testing/upstream_a.git', version: main}}
+    upstream_a: {release: {tags: {release: 'release/upstream/{package}/{version}'}, url: 'https://github.com/rep159-testing/upstream_a-release.git', version: 0.1.0-1}, source: {type: git, url: 'https://github.com/rep159-testing/upstream_a.git', version: main}}
     upstream_b: {source: {type: git, url: 'https://github.com/rep159-testing/upstream_b.git', version: main}}
     upstream_c: {source: {type: git, url: 'https://github.com/rep159-testing/upstream_c.git', version: main}}
   type: distribution
   version: 3
 name: upstream
 release_package_xmls:
-  ament_package: &id001 <?xml version="1.0" ?><?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?><package format="2"><name>ament_package</name><version>0.18.3</version><description>The parser for the manifest files in the ament buildsystem.</description><maintainer email="dharini@openrobotics.org">Dharini Dutia</maintainer><license>Apache License 2.0</license><author email="audrow@openrobotics.org">Audrow Nash</author><author email="dthomas@osrfoundation.org">Dirk Thomas</author><author email="mabel@openrobotics.org">Mabel Zhang</author><buildtool_export_depend>python3-setuptools</buildtool_export_depend><test_depend>python3-flake8</test_depend><test_depend>python3-pytest</test_depend><export><build_type>ament_python</build_type></export></package>
+  ament_cmake_core: &id001 '<?xml version="1.0" ?><?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?><package format="2"><name>ament_cmake_core</name><version>2.8.8</version><description>The core of the ament buildsystem in CMake. Several subcomponents provide specific funtionalities: * environment: provide prefix-level setup files * environment_hooks: provide package-level setup files and environment hooks * index: store information in an index and retrieve them without crawling * package_templates: templates from the ament_package Python package * symlink_install: use symlinks for CMake install commands</description><maintainer email="clalancette@gmail.com">Chris Lalancette</maintainer><license>Apache License 2.0</license><author>Dirk Thomas</author><author email="michel@ekumenlabs.com">Michel Hidalgo</author><buildtool_depend>cmake</buildtool_depend><buildtool_depend>ament_package</buildtool_depend><buildtool_depend>python3-catkin-pkg-modules</buildtool_depend><buildtool_export_depend>cmake</buildtool_export_depend><buildtool_export_depend>ament_package</buildtool_export_depend><buildtool_export_depend>python3-catkin-pkg-modules</buildtool_export_depend><export><build_type>ament_cmake</build_type></export></package>'
+  ament_package: &id002 <?xml version="1.0" ?><?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?><package format="2"><name>ament_package</name><version>0.18.3</version><description>The parser for the manifest files in the ament buildsystem.</description><maintainer email="dharini@openrobotics.org">Dharini Dutia</maintainer><license>Apache License 2.0</license><author email="audrow@openrobotics.org">Audrow Nash</author><author email="dthomas@osrfoundation.org">Dirk Thomas</author><author email="mabel@openrobotics.org">Mabel Zhang</author><buildtool_export_depend>python3-setuptools</buildtool_export_depend><test_depend>python3-flake8</test_depend><test_depend>python3-pytest</test_depend><export><build_type>ament_python</build_type></export></package>
+  upstream_a: &id003 '<?xml version="1.0" ?><?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?><package format="3"><name>upstream_a</name><version>0.1.0</version><description>Bottom of the REP-159 test chain: counts the elements of an XML document with libxml2. Part of the upstream distribution of the rep159-testing harness.</description><maintainer email="jrivero@honurobotics.com">Jose Luis Rivero</maintainer><license>Apache-2.0</license><buildtool_depend>cmake</buildtool_depend><depend>libxml2</depend><build_depend>gtest</build_depend><test_depend>gtest</test_depend><export><build_type>cmake</build_type></export></package>'
 source_repo_package_xmls:
   ament_cmake_core:
     _ref: f807d2ade807b3455057d4c64d089e0134a1e800
     ament_cmake_core:
     - ''
-    - '<?xml version="1.0" ?><?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?><package format="2"><name>ament_cmake_core</name><version>2.8.8</version><description>The core of the ament buildsystem in CMake. Several subcomponents provide specific funtionalities: * environment: provide prefix-level setup files * environment_hooks: provide package-level setup files and environment hooks * index: store information in an index and retrieve them without crawling * package_templates: templates from the ament_package Python package * symlink_install: use symlinks for CMake install commands</description><maintainer email="clalancette@gmail.com">Chris Lalancette</maintainer><license>Apache License 2.0</license><author>Dirk Thomas</author><author email="michel@ekumenlabs.com">Michel Hidalgo</author><buildtool_depend>cmake</buildtool_depend><buildtool_depend>ament_package</buildtool_depend><buildtool_depend>python3-catkin-pkg-modules</buildtool_depend><buildtool_export_depend>cmake</buildtool_export_depend><buildtool_export_depend>ament_package</buildtool_export_depend><buildtool_export_depend>python3-catkin-pkg-modules</buildtool_export_depend><export><build_type>ament_cmake</build_type></export></package>'
+    - *id001
   ament_package:
     _ref: 98089783110f7606a90e8ef9786719c3d0cd32f9
     ament_package:
     - ''
-    - *id001
+    - *id002
   ros_workspace:
     _ref: db49f0ae77098cb631f6a262808b01030ac6f784
     ros_workspace:
@@ -34,7 +36,7 @@ source_repo_package_xmls:
     _ref: 18480a749142b7677aa7c185efd6e9a30a855a79
     upstream_a:
     - ''
-    - '<?xml version="1.0" ?><?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?><package format="3"><name>upstream_a</name><version>0.1.0</version><description>Bottom of the REP-159 test chain: counts the elements of an XML document with libxml2. Part of the upstream distribution of the rep159-testing harness.</description><maintainer email="jrivero@honurobotics.com">Jose Luis Rivero</maintainer><license>Apache-2.0</license><buildtool_depend>cmake</buildtool_depend><depend>libxml2</depend><build_depend>gtest</build_depend><test_depend>gtest</test_depend><export><build_type>cmake</build_type></export></package>'
+    - *id003
   upstream_b:
     _ref: 58d0495faafaf84b6d1e4a5beac0f4a1e242e948
     upstream_b:
