@@ -14,16 +14,30 @@ from rosdistro import get_cached_distribution
 from rosdistro import get_index
 
 # The selection each ci-build file makes, and the repositories it must yield.
-# The fourth one is no ci-build file: binext's parent comes as binaries
-# (binary_import), so even a walk of downstream_bin_a's dependencies must not
+# The binext walk of downstream_bin_a's dependencies is no ci-build file:
+# binext's parent comes as binaries (binary_import), so even that walk must not
 # check out the upstream repositories. Neither are the last three: they pin the
 # release tags of ament_package, which srcext releases itself (release/srcext/)
 # while binext keeps upstream's (release/upstream/).
+UPSTREAM = ['ament_cmake_core', 'ament_package', 'ros_workspace',
+            'upstream_a', 'upstream_b', 'upstream_c']
 EXPECTED = [
+    # upstream/ci-nightly-release.yaml
     ('upstream',
      {'repository_names': ['upstream_a', 'upstream_b', 'upstream_c'],
       'package_names': [], 'package_dependencies': False},
      ['upstream_a', 'upstream_b', 'upstream_c']),
+    # upstream/ci-source-branches.yaml: every repository from main
+    ('upstream',
+     {'repository_names': UPSTREAM, 'package_names': [],
+      'package_dependencies': False},
+     UPSTREAM),
+    # upstream/ci-release-branches.yaml: the walk from the two leaves reaches
+    # every package, each at its release/upstream/ tag
+    ('upstream',
+     {'repository_names': [], 'package_names': ['upstream_c', 'ros_workspace'],
+      'package_dependencies': True},
+     UPSTREAM),
     ('srcext',
      {'repository_names': [], 'package_names': ['downstream_src_a'],
       'package_dependencies': True},
