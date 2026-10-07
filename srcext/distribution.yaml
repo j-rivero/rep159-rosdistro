@@ -23,6 +23,11 @@ repositories:
       url: https://github.com/rep159-testing/ament_package-release.git
       version: 0.18.3-1
   downstream_src_a:
+    release:
+      tags:
+        release: release/srcext/{package}/{version}
+      url: https://github.com/rep159-testing/downstream_src_a-release.git
+      version: 0.1.0-1
     source:
       type: git
       url: https://github.com/rep159-testing/downstream_src_a.git
