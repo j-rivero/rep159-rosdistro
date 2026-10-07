@@ -27,6 +27,11 @@ repositories:
       url: https://github.com/rep159-testing/ament_package.git
       version: main
   ros_workspace:
+    release:
+      tags:
+        release: release/upstream/{package}/{version}
+      url: https://github.com/rep159-testing/ros_workspace-release.git
+      version: 1.0.3-1
     source:
       type: git
       url: https://github.com/rep159-testing/ros_workspace.git
