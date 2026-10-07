@@ -1,15 +1,24 @@
 %YAML 1.1
-# binext: uses upstream's packages as the binaries upstream releases and
-# builds only its own package (REP 159 extension_method: binary_import). No
-# index_url: REP 159 then looks in this same index.
+# ROS distribution file
+# see REP 141: https://reps.openrobotics.org/rep-0141/
 ---
 extends:
 - distro_name: upstream
   extension_method: binary_import
+  index_url:
 release_platforms:
-  ubuntu: [resolute]
+  ubuntu:
+  - resolute
 repositories:
   downstream_bin_a:
-    source: {type: git, url: https://github.com/rep159-testing/downstream_bin_a.git, version: main}
+    release:
+      tags:
+        release: release/binext/{package}/{version}
+      url: https://github.com/rep159-testing/downstream_bin_a-release.git
+      version: 0.2.0-1
+    source:
+      type: git
+      url: https://github.com/rep159-testing/downstream_bin_a.git
+      version: main
 type: distribution
 version: 3
