@@ -60,12 +60,20 @@ def test_srcext_rebuilds_upstream_under_its_own_name():
 def test_binext_imports_upstream_as_binaries():
     dist = get_cached_distribution(get_index(INDEX_URL), 'binext')
     assert set(dist.source_packages) == set(UPSTREAM) | {'downstream_bin_a'}
-    assert set(dist.release_packages) == upstream_releases()
+    # binext releases only what it owns: overriding a binary_import parent is
+    # refused by the fork.
+    assert not releases('binext') & set(UPSTREAM)
+    assert set(dist.release_packages) == upstream_releases() | releases('binext')
     for repo_name in UPSTREAM:
         repo = dist.repositories[repo_name]
         assert repo.origin_distro == 'upstream'
         assert repo.extension_method == 'binary_import'
-    assert dist.repositories['downstream_bin_a'].origin_distro == 'binext'
+    own = dist.repositories['downstream_bin_a']
+    assert own.origin_distro == 'binext'
+    if 'downstream_bin_a' in releases('binext'):
+        assert own.extension_method is None
+        assert own.release_repository.tags == {
+            'release': 'release/binext/{package}/{version}'}
 
 
 def _write_index(tmp_path, distributions):
