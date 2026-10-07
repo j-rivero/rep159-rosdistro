@@ -33,5 +33,11 @@ repositories:
         release: release/srcext/{package}/{version}
       url: https://github.com/rep159-testing/ros_workspace-release.git
       version: 1.0.3-1
+  upstream_a:
+    release:
+      tags:
+        release: release/srcext/{package}/{version}
+      url: https://github.com/rep159-testing/upstream_a-release.git
+      version: 0.1.0-1
 type: distribution
 version: 3
