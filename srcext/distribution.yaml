@@ -39,5 +39,11 @@ repositories:
         release: release/srcext/{package}/{version}
       url: https://github.com/rep159-testing/upstream_a-release.git
       version: 0.1.0-1
+  upstream_b:
+    release:
+      tags:
+        release: release/srcext/{package}/{version}
+      url: https://github.com/rep159-testing/upstream_b-release.git
+      version: 0.1.0-1
 type: distribution
 version: 3
