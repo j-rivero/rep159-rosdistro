@@ -14,9 +14,11 @@ from rosdistro import get_cached_distribution
 from rosdistro import get_index
 
 # The selection each ci-build file makes, and the repositories it must yield.
-# The last one is no ci-build file: binext's parent comes as binaries
+# The fourth one is no ci-build file: binext's parent comes as binaries
 # (binary_import), so even a walk of downstream_bin_a's dependencies must not
-# check out the upstream repositories.
+# check out the upstream repositories. Neither are the last three: they pin the
+# release tags of ament_package, which srcext releases itself (release/srcext/)
+# while binext keeps upstream's (release/upstream/).
 EXPECTED = [
     ('upstream',
      {'repository_names': ['upstream_a', 'upstream_b', 'upstream_c'],
@@ -34,21 +36,54 @@ EXPECTED = [
      {'repository_names': [], 'package_names': ['downstream_bin_a'],
       'package_dependencies': True},
      ['downstream_bin_a']),
+] + [
+    (distro,
+     {'repository_names': [], 'package_names': ['ament_package'],
+      'package_dependencies': False},
+     ['ament_package'])
+    for distro in ('upstream', 'srcext', 'binext')
 ]
+
+
+def source_checkout(name):
+    return {
+        'type': 'git',
+        'url': 'https://github.com/rep159-testing/%s.git' % name,
+        'version': 'main'}
+
+
+# The release stanza bloom writes for a track named after the distribution.
+# srcext (source_rebuild) inherits upstream's stanza, release/upstream/ tags
+# included, until it releases the repository itself.
+def release_checkout(dist, distro, name):
+    repo = dist.repositories[name]
+    tag_distro = distro if getattr(repo, 'extension_method', None) is None \
+        else 'upstream'
+    return {
+        'type': 'git',
+        'url': 'https://github.com/rep159-testing/%s-release.git' % name,
+        'version': 'release/%s/%s/%s' % (
+            tag_distro, name, repo.release_repository.version)}
 
 
 def main(index_url):
     index = get_index(index_url)
     for distro, selection, expected in EXPECTED:
-        data = get_repositories_data(
-            get_cached_distribution(index, distro), **selection)
+        dist = get_cached_distribution(index, distro)
+        data = get_repositories_data(dist, **selection)
         assert sorted(data) == expected, \
             '%s resolves %s, expected %s' % (distro, sorted(data), expected)
+        # A named repository comes from its source entry. A walked package
+        # comes from its release, if it has one. Every repository holds one
+        # package of the same name.
         for name, repo in data.items():
-            assert repo == {
-                'type': 'git',
-                'url': 'https://github.com/rep159-testing/%s.git' % name,
-                'version': 'main'}, repo
+            if name in selection['repository_names'] or \
+                    name not in dist.release_packages:
+                want = source_checkout(name)
+            else:
+                want = release_checkout(dist, distro, name)
+            assert repo == want, '%s: %s checks out %s, expected %s' % (
+                distro, name, repo, want)
         print('%s: %s' % (distro, ', '.join(expected)))
     return 0
 
