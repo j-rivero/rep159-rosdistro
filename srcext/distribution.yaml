@@ -10,6 +10,12 @@ release_platforms:
   ubuntu:
   - resolute
 repositories:
+  ament_cmake_core:
+    release:
+      tags:
+        release: release/srcext/{package}/{version}
+      url: https://github.com/rep159-testing/ament_cmake_core-release.git
+      version: 2.8.8-1
   ament_package:
     release:
       tags:
