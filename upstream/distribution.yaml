@@ -57,6 +57,11 @@ repositories:
       url: https://github.com/rep159-testing/upstream_b.git
       version: main
   upstream_c:
+    release:
+      tags:
+        release: release/upstream/{package}/{version}
+      url: https://github.com/rep159-testing/upstream_c-release.git
+      version: 0.1.0-1
     source:
       type: git
       url: https://github.com/rep159-testing/upstream_c.git
