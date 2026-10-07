@@ -19,7 +19,10 @@ from rosdistro import get_index
 # check out the upstream repositories. Neither are the last three: they pin the
 # release tags of ament_package, which srcext releases itself (release/srcext/)
 # while binext keeps upstream's (release/upstream/).
-UPSTREAM = ['ament_cmake_core', 'ament_package', 'ros_workspace',
+# What the upstream CI builds select: every repository but ros_workspace,
+# which only builds into a merged install (ros_buildfarm CI installs each
+# package in its own prefix) and which ros2.repos leaves out too.
+UPSTREAM = ['ament_cmake_core', 'ament_package',
             'upstream_a', 'upstream_b', 'upstream_c']
 EXPECTED = [
     # upstream/ci-nightly-release.yaml
@@ -27,15 +30,16 @@ EXPECTED = [
      {'repository_names': ['upstream_a', 'upstream_b', 'upstream_c'],
       'package_names': [], 'package_dependencies': False},
      ['upstream_a', 'upstream_b', 'upstream_c']),
-    # upstream/ci-source-branches.yaml: every repository from main
+    # upstream/ci-source-branches.yaml: those repositories from main
     ('upstream',
      {'repository_names': UPSTREAM, 'package_names': [],
       'package_dependencies': False},
      UPSTREAM),
     # upstream/ci-release-branches.yaml: the walk from the two leaves reaches
-    # every package, each at its release/upstream/ tag
+    # the same packages, each at its release/upstream/ tag
     ('upstream',
-     {'repository_names': [], 'package_names': ['upstream_c', 'ros_workspace'],
+     {'repository_names': [],
+      'package_names': ['upstream_c', 'ament_cmake_core'],
       'package_dependencies': True},
      UPSTREAM),
     ('srcext',
