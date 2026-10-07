@@ -27,5 +27,11 @@ repositories:
       type: git
       url: https://github.com/rep159-testing/downstream_src_a.git
       version: main
+  ros_workspace:
+    release:
+      tags:
+        release: release/srcext/{package}/{version}
+      url: https://github.com/rep159-testing/ros_workspace-release.git
+      version: 1.0.3-1
 type: distribution
 version: 3
