@@ -3,9 +3,9 @@ distribution_file:
     ubuntu:
     - resolute
   repositories:
-    ament_cmake_core: {release: {tags: {release: 'release/upstream/{package}/{version}'}, url: 'https://github.com/rep159-testing/ament_cmake_core-release.git', version: 2.8.8-1}, source: {type: git, url: 'https://github.com/rep159-testing/ament_cmake_core.git', version: main}}
+    ament_cmake_core: {release: {tags: {release: 'release/upstream/{package}/{version}'}, url: 'https://github.com/rep159-testing/ament_cmake_core-release.git', version: 2.8.8-2}, source: {type: git, url: 'https://github.com/rep159-testing/ament_cmake_core.git', version: main}}
     ament_package: {release: {tags: {release: 'release/upstream/{package}/{version}'}, url: 'https://github.com/rep159-testing/ament_package-release.git', version: 0.18.3-1}, source: {type: git, url: 'https://github.com/rep159-testing/ament_package.git', version: main}}
-    ros_workspace: {release: {tags: {release: 'release/upstream/{package}/{version}'}, url: 'https://github.com/rep159-testing/ros_workspace-release.git', version: 1.0.3-1}, source: {type: git, url: 'https://github.com/rep159-testing/ros_workspace.git', version: main}}
+    ros_workspace: {release: {tags: {release: 'release/upstream/{package}/{version}'}, url: 'https://github.com/rep159-testing/ros_workspace-release.git', version: 1.0.3-2}, source: {type: git, url: 'https://github.com/rep159-testing/ros_workspace.git', version: main}}
     upstream_a: {release: {tags: {release: 'release/upstream/{package}/{version}'}, url: 'https://github.com/rep159-testing/upstream_a-release.git', version: 0.1.0-1}, source: {type: git, url: 'https://github.com/rep159-testing/upstream_a.git', version: main}}
     upstream_b: {release: {tags: {release: 'release/upstream/{package}/{version}'}, url: 'https://github.com/rep159-testing/upstream_b-release.git', version: 0.1.0-1}, source: {type: git, url: 'https://github.com/rep159-testing/upstream_b.git', version: main}}
     upstream_c: {release: {tags: {release: 'release/upstream/{package}/{version}'}, url: 'https://github.com/rep159-testing/upstream_c-release.git', version: 0.1.0-1}, source: {type: git, url: 'https://github.com/rep159-testing/upstream_c.git', version: main}}
