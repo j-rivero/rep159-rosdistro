@@ -15,7 +15,7 @@ repositories:
       tags:
         release: release/binext/{package}/{version}
       url: https://github.com/rep159-testing/downstream_bin_a-release.git
-      version: 0.2.0-1
+      version: 0.2.0-2
     source:
       type: git
       url: https://github.com/rep159-testing/downstream_bin_a.git
