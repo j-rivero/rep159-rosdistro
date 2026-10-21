@@ -60,14 +60,18 @@ def test_srcext_rebuilds_upstream_under_its_own_name():
 def test_binext_imports_upstream_as_binaries():
     dist = get_cached_distribution(get_index(INDEX_URL), 'binext')
     assert set(dist.source_packages) == set(UPSTREAM) | {'downstream_bin_a'}
-    # binext releases only what it owns: overriding a binary_import parent is
-    # refused by the fork.
-    assert not releases('binext') & set(UPSTREAM)
+    # binext releases only what it owns, plus its own ros_workspace (REP 159
+    # setup chain); the fork refuses any other override of a binary_import
+    # parent.
+    assert releases('binext') & set(UPSTREAM) == {'ros_workspace'}
     assert set(dist.release_packages) == upstream_releases() | releases('binext')
-    for repo_name in UPSTREAM:
+    for repo_name in set(UPSTREAM) - {'ros_workspace'}:
         repo = dist.repositories[repo_name]
         assert repo.origin_distro == 'upstream'
         assert repo.extension_method == 'binary_import'
+    workspace = dist.repositories['ros_workspace']
+    assert workspace.origin_distro == 'binext'
+    assert workspace.release_repository.version == '1.0.4-1'
     own = dist.repositories['downstream_bin_a']
     assert own.origin_distro == 'binext'
     if 'downstream_bin_a' in releases('binext'):

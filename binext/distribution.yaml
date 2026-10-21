@@ -20,5 +20,11 @@ repositories:
       type: git
       url: https://github.com/rep159-testing/downstream_bin_a.git
       version: main
+  ros_workspace:
+    release:
+      tags:
+        release: release/binext/{package}/{version}
+      url: https://github.com/rep159-testing/ros_workspace-release.git
+      version: 1.0.4-1
 type: distribution
 version: 3
