@@ -15,7 +15,7 @@ release_package_xmls:
   downstream_bin_a: &id001 '<?xml version="1.0" ?><?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?><package format="3"><name>downstream_bin_a</name><version>0.2.0</version><description>Package of the binext distribution of the REP-159 test harness: reads a YAML document with libyaml and labels its XML payload through the upstream chain, which binext imports as binaries with binary_import.</description><maintainer email="jrivero@honurobotics.com">Jose Luis Rivero</maintainer><license>Apache-2.0</license><buildtool_depend>cmake</buildtool_depend><buildtool_depend>pkg-config</buildtool_depend><depend>upstream_c</depend><build_depend>libyaml-dev</build_depend><exec_depend>libyaml</exec_depend><build_depend>gtest</build_depend><test_depend>gtest</test_depend><export><build_type>cmake</build_type></export></package>'
 source_repo_package_xmls:
   downstream_bin_a:
-    _ref: 092138ece80d21b0b863d5b6e099d09852a4a341
+    _ref: edf059beb18adfc82951cf6e65d9ac91c1414d85
     downstream_bin_a:
     - ''
     - *id001
