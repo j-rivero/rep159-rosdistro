@@ -69,9 +69,10 @@ def test_repositories_track_main(name):
     for repo_name, repo in repositories.items():
         if repo_name in inherited:
             # bloom into a source_rebuild child adds the child's own release
-            # stanza; the source entry stays the parent's.
-            assert [p['extension_method'] for p in EXTENDS[name]] == \
-                ['source_rebuild'], repo_name
+            # stanza; the source entry stays the parent's. A binary_import
+            # child may do the same for ros_workspace only (REP 159).
+            methods = [p['extension_method'] for p in EXTENDS[name]]
+            assert methods == ['source_rebuild'] or repo_name == 'ros_workspace', repo_name
             assert set(repo) == {'release'}, repo_name
             continue
         assert set(repo) <= {'source', 'release'}, repo_name
