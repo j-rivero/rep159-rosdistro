@@ -6,7 +6,7 @@ distribution_file:
     ros_workspace_shell: {source: {type: git, url: 'https://github.com/rep159-testing/ros_workspace_shell.git', version: main}}
     upstream_a: {release: {tags: {release: 'release/ground/{package}/{version}'}, url: 'https://github.com/rep159-testing/upstream_a-release.git', version: 0.1.0-1}, source: {type: git, url: 'https://github.com/rep159-testing/upstream_a.git', version: main}}
     upstream_b: {release: {tags: {release: 'release/ground/{package}/{version}'}, url: 'https://github.com/rep159-testing/upstream_b-release.git', version: 0.1.0-1}, source: {type: git, url: 'https://github.com/rep159-testing/upstream_b.git', version: main}}
-    upstream_c: {source: {type: git, url: 'https://github.com/rep159-testing/upstream_c.git', version: main}}
+    upstream_c: {release: {tags: {release: 'release/ground/{package}/{version}'}, url: 'https://github.com/rep159-testing/upstream_c-release.git', version: 0.1.0-1}, source: {type: git, url: 'https://github.com/rep159-testing/upstream_c.git', version: main}}
   type: distribution
   version: 3
   workspace_package: ros_workspace_shell
@@ -14,6 +14,7 @@ name: ground
 release_package_xmls:
   upstream_a: &id001 '<?xml version="1.0" ?><?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?><package format="3"><name>upstream_a</name><version>0.1.0</version><description>Bottom of the REP-159 test chain: counts the elements of an XML document with libxml2. Part of the upstream distribution of the rep159-testing harness.</description><maintainer email="jrivero@honurobotics.com">Jose Luis Rivero</maintainer><license>Apache-2.0</license><buildtool_depend>cmake</buildtool_depend><depend>libxml2</depend><build_depend>gtest</build_depend><test_depend>gtest</test_depend><export><build_type>cmake</build_type></export></package>'
   upstream_b: &id002 '<?xml version="1.0" ?><?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?><package format="3"><name>upstream_b</name><version>0.1.0</version><description>Middle of the REP-159 test chain: summarizes an XML document through upstream_a. Part of the upstream distribution of the rep159-testing harness.</description><maintainer email="jrivero@honurobotics.com">Jose Luis Rivero</maintainer><license>Apache-2.0</license><buildtool_depend>cmake</buildtool_depend><depend>upstream_a</depend><build_depend>gtest</build_depend><test_depend>gtest</test_depend><export><build_type>cmake</build_type></export></package>'
+  upstream_c: &id003 '<?xml version="1.0" ?><?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?><package format="3"><name>upstream_c</name><version>0.1.0</version><description>Top of the REP-159 test chain: labels an XML summary from upstream_b. Part of the upstream distribution of the rep159-testing harness.</description><maintainer email="jrivero@honurobotics.com">Jose Luis Rivero</maintainer><license>Apache-2.0</license><buildtool_depend>cmake</buildtool_depend><depend>upstream_b</depend><build_depend>gtest</build_depend><test_depend>gtest</test_depend><export><build_type>cmake</build_type></export></package>'
 source_repo_package_xmls:
   ros_workspace_shell:
     _ref: a89cc7b77b4b290b72b5ea16dddff193b6dbc334
@@ -34,6 +35,6 @@ source_repo_package_xmls:
     _ref: fa7db13f83da86bdcc34b267b00bfc368269c194
     upstream_c:
     - ''
-    - '<?xml version="1.0" ?><?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?><package format="3"><name>upstream_c</name><version>0.1.0</version><description>Top of the REP-159 test chain: labels an XML summary from upstream_b. Part of the upstream distribution of the rep159-testing harness.</description><maintainer email="jrivero@honurobotics.com">Jose Luis Rivero</maintainer><license>Apache-2.0</license><buildtool_depend>cmake</buildtool_depend><depend>upstream_b</depend><build_depend>gtest</build_depend><test_depend>gtest</test_depend><export><build_type>cmake</build_type></export></package>'
+    - *id003
 type: cache
 version: 2
