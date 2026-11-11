@@ -4,14 +4,15 @@ distribution_file:
     - resolute
   repositories:
     ros_workspace_shell: {source: {type: git, url: 'https://github.com/rep159-testing/ros_workspace_shell.git', version: main}}
-    upstream_a: {source: {type: git, url: 'https://github.com/rep159-testing/upstream_a.git', version: main}}
+    upstream_a: {release: {tags: {release: 'release/ground/{package}/{version}'}, url: 'https://github.com/rep159-testing/upstream_a-release.git', version: 0.1.0-1}, source: {type: git, url: 'https://github.com/rep159-testing/upstream_a.git', version: main}}
     upstream_b: {source: {type: git, url: 'https://github.com/rep159-testing/upstream_b.git', version: main}}
     upstream_c: {source: {type: git, url: 'https://github.com/rep159-testing/upstream_c.git', version: main}}
   type: distribution
   version: 3
   workspace_package: ros_workspace_shell
 name: ground
-release_package_xmls: {}
+release_package_xmls:
+  upstream_a: &id001 '<?xml version="1.0" ?><?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?><package format="3"><name>upstream_a</name><version>0.1.0</version><description>Bottom of the REP-159 test chain: counts the elements of an XML document with libxml2. Part of the upstream distribution of the rep159-testing harness.</description><maintainer email="jrivero@honurobotics.com">Jose Luis Rivero</maintainer><license>Apache-2.0</license><buildtool_depend>cmake</buildtool_depend><depend>libxml2</depend><build_depend>gtest</build_depend><test_depend>gtest</test_depend><export><build_type>cmake</build_type></export></package>'
 source_repo_package_xmls:
   ros_workspace_shell:
     _ref: a89cc7b77b4b290b72b5ea16dddff193b6dbc334
@@ -22,7 +23,7 @@ source_repo_package_xmls:
     _ref: 18480a749142b7677aa7c185efd6e9a30a855a79
     upstream_a:
     - ''
-    - '<?xml version="1.0" ?><?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?><package format="3"><name>upstream_a</name><version>0.1.0</version><description>Bottom of the REP-159 test chain: counts the elements of an XML document with libxml2. Part of the upstream distribution of the rep159-testing harness.</description><maintainer email="jrivero@honurobotics.com">Jose Luis Rivero</maintainer><license>Apache-2.0</license><buildtool_depend>cmake</buildtool_depend><depend>libxml2</depend><build_depend>gtest</build_depend><test_depend>gtest</test_depend><export><build_type>cmake</build_type></export></package>'
+    - *id001
   upstream_b:
     _ref: 58d0495faafaf84b6d1e4a5beac0f4a1e242e948
     upstream_b:
