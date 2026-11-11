@@ -7,6 +7,11 @@ release_platforms:
   - resolute
 repositories:
   ros_workspace_shell:
+    release:
+      tags:
+        release: release/ground/{package}/{version}
+      url: https://github.com/rep159-testing/ros_workspace_shell-release.git
+      version: 0.1.0-1
     source:
       type: git
       url: https://github.com/rep159-testing/ros_workspace_shell.git
