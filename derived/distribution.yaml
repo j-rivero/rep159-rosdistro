@@ -21,6 +21,12 @@ repositories:
         release: release/derived/{package}/{version}
       url: https://github.com/rep159-testing/ros_workspace_shell-release.git
       version: 0.1.0-1
+  upstream_a:
+    release:
+      tags:
+        release: release/derived/{package}/{version}
+      url: https://github.com/rep159-testing/upstream_a-release.git
+      version: 0.1.0-1
 type: distribution
 version: 3
 workspace_package: ros_workspace_shell
