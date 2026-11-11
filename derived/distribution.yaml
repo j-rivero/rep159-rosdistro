@@ -11,6 +11,11 @@ release_platforms:
   - resolute
 repositories:
   downstream_src_a:
+    release:
+      tags:
+        release: release/derived/{package}/{version}
+      url: https://github.com/rep159-testing/downstream_src_a-release.git
+      version: 0.1.0-1
     source:
       type: git
       url: https://github.com/rep159-testing/downstream_src_a.git
