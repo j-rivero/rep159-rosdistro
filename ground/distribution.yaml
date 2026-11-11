@@ -1,0 +1,31 @@
+%YAML 1.1
+# ROS distribution file
+# see REP 141: https://reps.openrobotics.org/rep-0141/
+---
+release_platforms:
+  ubuntu:
+  - resolute
+repositories:
+  ros_workspace_shell:
+    source:
+      type: git
+      url: https://github.com/rep159-testing/ros_workspace_shell.git
+      version: main
+  upstream_a:
+    source:
+      type: git
+      url: https://github.com/rep159-testing/upstream_a.git
+      version: main
+  upstream_b:
+    source:
+      type: git
+      url: https://github.com/rep159-testing/upstream_b.git
+      version: main
+  upstream_c:
+    source:
+      type: git
+      url: https://github.com/rep159-testing/upstream_c.git
+      version: main
+type: distribution
+version: 3
+workspace_package: ros_workspace_shell

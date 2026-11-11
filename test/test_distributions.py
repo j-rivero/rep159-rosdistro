@@ -13,12 +13,14 @@ import pytest
 import yaml
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DISTROS = ('upstream', 'srcext', 'binext')
+DISTROS = ('upstream', 'srcext', 'binext', 'ground', 'derived')
 REPOSITORIES = {
     'upstream': {'ament_cmake_core', 'ament_package', 'ros_workspace',
                  'upstream_a', 'upstream_b', 'upstream_c'},
     'srcext': {'downstream_src_a'},
     'binext': {'downstream_bin_a'},
+    'ground': {'ros_workspace_shell', 'upstream_a', 'upstream_b', 'upstream_c'},
+    'derived': {'downstream_src_a'},
 }
 EXTENDS = {
     'upstream': [],
@@ -27,6 +29,15 @@ EXTENDS = {
         {'distro_name': 'upstream', 'extension_method': 'source_rebuild'}],
     'binext': [
         {'distro_name': 'upstream', 'extension_method': 'binary_import'}],
+    'ground': [],
+    'derived': [
+        {'distro_name': 'ground', 'extension_method': 'source_rebuild'}],
+}
+# The package that installs the setup files of the prefix, when it is not
+# ros_workspace (REP 159 workspace_package; not inherited).
+WORKSPACE_PACKAGE = {
+    'ground': 'ros_workspace_shell',
+    'derived': 'ros_workspace_shell',
 }
 
 
@@ -44,7 +55,7 @@ def cache(name):
         return yaml.safe_load(f)
 
 
-def test_index_lists_exactly_the_three_distributions():
+def test_index_lists_exactly_the_five_distributions():
     index = load('index-v4.yaml')
     assert index['version'] == 4
     assert set(index['distributions']) == set(DISTROS)
@@ -105,6 +116,18 @@ def test_extends(name):
                 if value is not None}
                for parent in distribution_file(name).get('extends', [])]
     assert extends == EXTENDS[name]
+
+
+@pytest.mark.parametrize('name', DISTROS)
+def test_workspace_package(name):
+    assert distribution_file(name).get('workspace_package') == \
+        WORKSPACE_PACKAGE.get(name)
+
+
+def test_the_second_chain_has_no_ament_package():
+    for name in ('ground', 'derived'):
+        assert not {'ament_package', 'ament_cmake_core', 'ros_workspace'} & \
+            set(distribution_file(name)['repositories'])
 
 
 @pytest.mark.parametrize('name', DISTROS)

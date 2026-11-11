@@ -16,6 +16,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INDEX_URL = 'file://' + os.path.join(ROOT, 'index-v4.yaml')
 UPSTREAM = ('ament_cmake_core', 'ament_package', 'ros_workspace',
             'upstream_a', 'upstream_b', 'upstream_c')
+GROUND = ('ros_workspace_shell', 'upstream_a', 'upstream_b', 'upstream_c')
 
 
 def load(path):
@@ -55,6 +56,18 @@ def test_srcext_rebuilds_upstream_under_its_own_name():
             # unchanged, release/upstream/ tags included, while rosdep
             # already names the package ros-srcext-*.
             assert repo.extension_method == 'source_rebuild'
+
+
+def test_derived_rebuilds_ground_without_ament():
+    index = get_index(INDEX_URL)
+    dist = get_cached_distribution(index, 'derived')
+    assert set(dist.source_packages) == set(GROUND) | {'downstream_src_a'}
+    assert set(dist.release_packages) == releases('ground') | releases('derived')
+    assert dist.workspace_package == 'ros_workspace_shell'
+    assert get_cached_distribution(index, 'ground').workspace_package == \
+        'ros_workspace_shell'
+    for repo_name in GROUND:
+        assert dist.repositories[repo_name].origin_distro == 'derived'
 
 
 def test_binext_imports_upstream_as_binaries():

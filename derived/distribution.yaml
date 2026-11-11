@@ -1,0 +1,20 @@
+%YAML 1.1
+# ROS distribution file
+# see REP 141: https://reps.openrobotics.org/rep-0141/
+---
+extends:
+- distro_name: ground
+  extension_method: source_rebuild
+  index_url:
+release_platforms:
+  ubuntu:
+  - resolute
+repositories:
+  downstream_src_a:
+    source:
+      type: git
+      url: https://github.com/rep159-testing/downstream_src_a.git
+      version: main
+type: distribution
+version: 3
+workspace_package: ros_workspace_shell
